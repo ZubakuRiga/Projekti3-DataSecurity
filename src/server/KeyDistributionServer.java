@@ -15,7 +15,7 @@ import java.util.Base64;
 public class KeyDistributionServer {
 
     public static void main(String[] args) {
-        System.out.println("Starting Key Distribution Server...");
+        System.out.println("Duke startuar Serverin per Shperndarjen e Celesit...");
 
         ServerSocket serverSocket = null;
         Socket clientSocket = null;
@@ -24,18 +24,18 @@ public class KeyDistributionServer {
 
         try {
             serverSocket = new ServerSocket(5000);
-            System.out.println("Listening on port 5000...");
+            System.out.println("Duke degjuar ne portin 5000...");
 
             clientSocket = serverSocket.accept();
-            System.out.println("Client connected.");
+            System.out.println("Klienti u lidh.");
 
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new PrintWriter(clientSocket.getOutputStream(), true);
 
-            // Step 1: Marrja e celesit publik nga klienti
+            // Step 1: Marrja e çelesit publik nga klienti
             String base64ClientPublicKey = in.readLine();
             if (base64ClientPublicKey == null || base64ClientPublicKey.isBlank()) {
-                System.err.println("No RSA public key received from client.");
+                System.err.println("Nuk u pranua asnje çeles publik RSA nga klienti.");
                 return;
             }
 
@@ -44,62 +44,66 @@ public class KeyDistributionServer {
                 byte[] publicKeyBytes = Base64.getDecoder().decode(base64ClientPublicKey);
                 clientPublicKey = KeyFactory.getInstance("RSA")
                         .generatePublic(new X509EncodedKeySpec(publicKeyBytes));
-                System.out.println("Client's RSA public key parsed successfully.");
+                System.out.println("Çelesi publik RSA i klientit u lexua me sukses.");
             } catch (Exception e) {
-                System.err.println("Failed to parse client's public key: " + e.getMessage());
+                System.err.println("Deshtoi leximi i çelesit publik te klientit: " + e.getMessage());
                 return;
             }
 
-            // Step 2: Gjenerimi i celesit nga serveri
+            // Step 2: Gjenerimi i çelesit nga serveri
             SecretKey aesKey = AESutil.generateAESKey();
             if (aesKey == null) {
-                System.err.println("Failed to generate AES key.");
+                System.err.println("Deshtoi gjenerimi i çelesit AES.");
                 return;
             }
 
-            // Step 3: Enkriptimi i celesit AES me celesin publik te klientit
+            // Step 3: Enkriptimi i çelesit AES me çelesin publik te klientit
             String encryptedKey = RSAUtil.encryptRSA(aesKey.getEncoded(), clientPublicKey);
             if (encryptedKey == null) {
-                System.err.println("Failed to encrypt AES key with client's public RSA key.");
+                System.err.println("Deshtoi enkriptimi i çelesit AES me çelesin publik RSA te klientit.");
                 return;
             }
 
-            // Step 4: Dergimi i celesit te enkriptuar tek klienti
+            // Step 4: Dergimi i çelesit te enkriptuar tek klienti
             out.println(encryptedKey);
-            System.out.println("Encrypted symmetric key sent to client.");
+            System.out.println("Çelesi simetrik i enkriptuar u dergua te klienti.");
 
             // Step 5: Marrja e mesazhit nga klienti
             String encryptedMessage = in.readLine();
             if (encryptedMessage == null || encryptedMessage.isBlank()) {
-                System.err.println("No encrypted message received from client.");
+                System.err.println("Nuk u pranua asnje mesazh i enkriptuar nga klienti.");
                 return;
             }
 
             // Step 6: Dekriptimi i mesazhit
             String decryptedMessage = AESutil.decryptAES(encryptedMessage, aesKey);
             if (decryptedMessage == null) {
-                System.err.println("Failed to decrypt message from client.");
+                System.err.println("Deshtoi dekriptimi i mesazhit nga klienti.");
                 return;
             }
 
             // Step 7: Shfaqja e mesazhit
-            System.out.println("Message decrypted successfully:");
+            System.out.println("Mesazhi u dekriptua me sukses:");
             System.out.println("> " + decryptedMessage);
 
         } catch (IOException e) {
-            System.err.println("I/O Error: " + e.getMessage());
+            System.err.println("Gabim I/O: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("Unexpected Error: " + e.getMessage());
+            System.err.println("Gabim i papritur: " + e.getMessage());
             e.printStackTrace();
         } finally {
             try {
-                if (in != null) in.close();
-                if (out != null) out.close();
-                if (clientSocket != null) clientSocket.close();
-                if (serverSocket != null) serverSocket.close();
-                System.out.println("Server shutdown completed.");
+                if (in != null)
+                    in.close();
+                if (out != null)
+                    out.close();
+                if (clientSocket != null)
+                    clientSocket.close();
+                if (serverSocket != null)
+                    serverSocket.close();
+                System.out.println("Serveri u mbyll me sukses.");
             } catch (IOException e) {
-                System.err.println("Error closing server resources: " + e.getMessage());
+                System.err.println("Gabim gjate mbylljes se resurseve te serverit: " + e.getMessage());
             }
         }
     }

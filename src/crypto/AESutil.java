@@ -8,19 +8,20 @@ import java.util.Base64;
 
 public class AESutil {
 
-    // Kjo metodë gjeneron një çelës AES të tipit 128-bit.
+    // Kjo metode gjeneron nje çeles AES te tipit 128-bit.
     public static SecretKey generateAESKey() {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("AES");
             keyGen.init(128); // AES 128-bit
             return keyGen.generateKey();
         } catch (Exception e) {
-            System.err.println("Gabim gjatë gjenerimit të çelësit AES: " + e.getMessage());
+            System.err.println("Gabim gjate gjenerimit te çelesit AES: " + e.getMessage());
             return null;
         }
     }
 
-    // Kjo metodë enkripton një tekst duke përdorur çelësin AES dhe e kthen të enkriptuar në formatin Base64.
+    // Kjo metode enkripton nje tekst duke perdorur çelesin AES dhe e kthen te
+    // enkriptuar ne formatin Base64.
     public static String encryptAES(String data, SecretKey key) {
         try {
             Cipher cipher = Cipher.getInstance("AES");
@@ -28,12 +29,13 @@ public class AESutil {
             byte[] encryptedBytes = cipher.doFinal(data.getBytes());
             return Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
-            System.err.println("Gabim gjatë enkriptimit AES: " + e.getMessage());
+            System.err.println("Gabim gjate enkriptimit AES: " + e.getMessage());
             return null;
         }
     }
 
-    // Kjo metodë dekripton një tekst të enkriptuar në Base64 dhe e kthen në tekst të qartë duke përdorur çelësin AES.
+    // Kjo metode dekripton nje tekst te enkriptuar ne Base64 dhe e kthen ne tekst
+    // te qarte duke perdorur çelesin AES.
     public static String decryptAES(String encrypted, SecretKey key) {
         try {
             Cipher cipher = Cipher.getInstance("AES");
@@ -42,12 +44,12 @@ public class AESutil {
             byte[] decryptedBytes = cipher.doFinal(decodedBytes);
             return new String(decryptedBytes);
         } catch (Exception e) {
-            System.err.println("Gabim gjatë dekriptimit AES: " + e.getMessage());
+            System.err.println("Gabim gjate dekriptimit AES: " + e.getMessage());
             return null;
         }
     }
 
-    // Kjo metodë konverton një çelës AES të koduar në Base64 në objektin SecretKey.
+    // Kjo metode konverton nje çeles AES te koduar ne Base64 ne objektin SecretKey.
     public static SecretKey decodeAESKey(String encodedKey) {
         byte[] decoded = Base64.getDecoder().decode(encodedKey);
         return new SecretKeySpec(decoded, 0, decoded.length, "AES");

@@ -16,9 +16,9 @@ public class RSAUtil {
             generator.initialize(2048); // Secure key size
             return generator.generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
-            System.err.println("❌ RSA algorithm not available: " + e.getMessage());
+            System.err.println("RSA algorithm not available: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("❌ Failed to generate RSA key pair: " + e.getMessage());
+            System.err.println("Failed to generate RSA key pair: " + e.getMessage());
         }
         return null; // Return null to indicate failure
     }
@@ -36,9 +36,9 @@ public class RSAUtil {
             byte[] encrypted = cipher.doFinal(data); // Perform encryption
             return Base64.getEncoder().encodeToString(encrypted); // Encode to Base64 for safe transport
         } catch (GeneralSecurityException e) {
-            System.err.println("❌ Encryption failed: " + e.getMessage());
+            System.err.println("Encryption failed: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("❌ Unexpected error during encryption: " + e.getMessage());
+            System.err.println("Unexpected error during encryption: " + e.getMessage());
         }
         return null; // Return null on failure
     }
@@ -56,11 +56,11 @@ public class RSAUtil {
             cipher.init(Cipher.DECRYPT_MODE, key);
             return cipher.doFinal(encryptedBytes); // Perform decryption
         } catch (GeneralSecurityException e) {
-            System.err.println("❌ Decryption failed: " + e.getMessage());
+            System.err.println("Decryption failed: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            System.err.println("❌ Base64 decoding failed: " + e.getMessage());
+            System.err.println("Base64 decoding failed: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("❌ Unexpected error during decryption: " + e.getMessage());
+            System.err.println("Unexpected error during decryption: " + e.getMessage());
         }
         return null; // Return null on failure
     }

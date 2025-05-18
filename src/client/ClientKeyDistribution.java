@@ -16,11 +16,12 @@ import java.util.Scanner;
 
 public class ClientKeyDistribution {
     public static void main(String[] args) {
-        System.out.println("Welcome to the Symmetric Key Distribution");
+        System.out.println("Mire se vini te Shperndarja e Çelesit Simetrik");
 
         Socket socket = null;
         PrintWriter out = null;
         BufferedReader in = null;
+        Scanner scanner = null;
 
         try {
             // Gjeneron key pair
@@ -64,7 +65,7 @@ public class ClientKeyDistribution {
             System.out.println("Symmetric key u pranua dhe u dekriptua me RSA!");
 
             // Mesazhi qe do te enkriptohet
-            Scanner scanner = new Scanner(System.in);
+            scanner = new Scanner(System.in);
             System.out.print("Shkruani mesazhin qe do te enkriptohet\n> ");
             String message = scanner.nextLine();
 
@@ -83,14 +84,18 @@ public class ClientKeyDistribution {
             e.printStackTrace();
         } finally {
             try {
-                if (socket != null) socket.close();
-                if (in != null) in.close();
-                if (out != null) out.close();
+                if (socket != null)
+                    socket.close();
+                if (in != null)
+                    in.close();
+                if (out != null)
+                    out.close();
+                if (scanner != null)
+                    scanner.close();
             } catch (IOException e) {
                 System.err.println("Error: " + e.getMessage());
             }
         }
 
-
-        }
+    }
 }
