@@ -39,7 +39,7 @@ public class ClientKeyDistribution {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 System.out.println("U krijua lidhja me serverin per Key Distributin!");
             } catch (IOException e) {
-                System.err.println("Lidhja me server deshtoj" + e.getMessage());
+                System.err.println("Lidhja me server deshtoj: " + e.getMessage());
                 return;
             }
 
